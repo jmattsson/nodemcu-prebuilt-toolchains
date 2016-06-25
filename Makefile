@@ -22,6 +22,10 @@ esp32/bin/xtensa-esp108-elf-gcc: build/esp108/.config
 	$Qcd "$(dir $<)" && ./ct-ng build
 
 
+.PHONY:clean
+clean:
+	-rm -rf build/esp108
+
 .SUFFIXES:
 %: %,v
 %: RCS/%,v
