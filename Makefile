@@ -20,7 +20,7 @@ esp8266/bin/xtensa-lx106-elf-gcc: build/lx106/Makefile
 
 
 build/esp108/bootstrap:
-	$Qcd build && git clone -b esp108-1.21.0 http://github.com/jcmvbkbc/crosstool-NG.git esp108
+	$Qcd build && git clone -b esp108-1.21.0 https://github.com/jcmvbkbc/crosstool-NG.git esp108
 	@touch $@
 
 build/esp108/Makefile: build/esp108/bootstrap
