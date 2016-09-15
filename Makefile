@@ -1,4 +1,4 @@
-default: esp108 lx106
+default: esp32 lx106
 
 TOPDIR:=$(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 
@@ -8,7 +8,7 @@ Q?=@
 # as they step on each others toes in some areas (e.g. linker scripts).
 #
 .PHONY: esp32 esp8266
-esp108: esp32/bin/xtensa-esp108-elf-gcc
+esp32: esp32/bin/xtensa-esp32-elf-gcc
 lx106:  esp8266/bin/xtensa-lx106-elf-gcc
 
 build/lx106/Makefile:
@@ -19,28 +19,28 @@ esp8266/bin/xtensa-lx106-elf-gcc: build/lx106/Makefile
 	$Qcd "$(dir $<)" && $(MAKE) STANDALONE=n TOOLCHAIN="$(TOPDIR)/esp8266" toolchain libhal
 
 
-build/esp108/bootstrap:
-	$Qcd build && git clone -b esp108-1.21.0 https://github.com/jcmvbkbc/crosstool-NG.git esp108
+build/esp32/bootstrap:
+	$Qcd build && git clone -b xtensa-1.22.x https://github.com/espressif/crosstool-NG.git esp32
 	@touch $@
 
-build/esp108/Makefile: build/esp108/bootstrap
+build/esp32/Makefile: build/esp32/bootstrap
 	$Qcd "$(dir $@)" && ./bootstrap && ./configure --prefix="`pwd`"
 
-build/esp108/ct-ng: build/esp108/Makefile
+build/esp32/ct-ng: build/esp32/Makefile
 	$Qcd "$(dir $@)" && $(MAKE) MAKELEVEL=0 && $(MAKE) MAKELEVEL=0 install
 
-build/esp108/.config: build/esp108/ct-ng
-	$Qcd "$(dir $@)" && ./ct-ng xtensa-esp108-elf
+build/esp32/.config: build/esp32/ct-ng
+	$Qcd "$(dir $@)" && ./ct-ng xtensa-esp32-elf
 	$Qsed -i 's,^CT_PREFIX_DIR=.*$$,CT_PREFIX_DIR="$${CT_TOP_DIR}/../../esp32",' $@
 	$Qecho CT_STATIC_TOOLCHAIN=y >> $@
 
-esp32/bin/xtensa-esp108-elf-gcc: build/esp108/.config
+esp32/bin/xtensa-esp32-elf-gcc: build/esp32/.config
 	$Qcd "$(dir $<)" && ./ct-ng build
 
 
 .PHONY:clean
 clean:
-	-rm -rf build/esp108 build/lx106
+	-rm -rf build/esp32 build/lx106
 
 .SUFFIXES:
 %: %,v
