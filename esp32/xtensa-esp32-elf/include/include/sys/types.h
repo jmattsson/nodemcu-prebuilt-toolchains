@@ -89,10 +89,22 @@ typedef	quad_t *	qaddr_t;
 
 #ifndef _BSDTYPES_DEFINED
 /* also defined in mingw/gmon.h and in w32api/winsock[2].h */
+#ifndef __u_char_defined
 typedef	unsigned char	u_char;
+#define __u_char_defined
+#endif
+#ifndef __u_short_defined
 typedef	unsigned short	u_short;
+#define __u_short_defined
+#endif
+#ifndef __u_int_defined
 typedef	unsigned int	u_int;
+#define __u_int_defined
+#endif
+#ifndef __u_long_defined
 typedef	unsigned long	u_long;
+#define __u_long_defined
+#endif
 #define _BSDTYPES_DEFINED
 #endif
 
@@ -126,8 +138,14 @@ struct itimerspec {
   struct timespec  it_value;     /* Timer expiration */
 };
 
+#ifndef __daddr_t_defined
 typedef	long	daddr_t;
+#define __daddr_t_defined
+#endif
+#ifndef __caddr_t_defined
 typedef	char *	caddr_t;
+#define __caddr_t_defined
+#endif
 
 #ifndef __CYGWIN__
 #if defined(__MS_types__) || defined(__rtems__) || \
@@ -304,6 +322,10 @@ typedef __uint32_t pthread_t;            /* identify a thread */
 #define PTHREAD_CREATE_DETACHED 0
 #define PTHREAD_CREATE_JOINABLE  1
 
+#if defined(__rtems__)
+  #include <sys/cpuset.h>
+#endif
+
 #if defined(__XMK__)
 typedef struct pthread_attr_s {
   int contentionscope;
@@ -333,7 +355,11 @@ typedef struct {
   int  cputime_clock_allowed;  /* see time.h */
 #endif
   int  detachstate;
-
+#if defined(__rtems__)
+  size_t affinitysetsize;
+  cpu_set_t *affinityset;
+  cpu_set_t affinitysetpreallocated;
+#endif
 } pthread_attr_t;
 
 #endif /* !defined(__XMK__) */

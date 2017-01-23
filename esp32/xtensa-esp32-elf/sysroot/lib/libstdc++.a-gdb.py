@@ -1,5 +1,5 @@
 # -*- python -*-
-# Copyright (C) 2009-2013 Free Software Foundation, Inc.
+# Copyright (C) 2009-2015 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@ import gdb
 import os
 import os.path
 
-pythondir = '/home/johny/src/DiUS/nodemcu-firmware/tools/toolchains/build/esp32/../../esp32/share/gcc-4.8.5/python'
-libdir = '/home/johny/src/DiUS/nodemcu-firmware/tools/toolchains/build/esp32/../../esp32/xtensa-esp32-elf/lib'
+pythondir = '/home/johny/src/nodemcu-prebuilt-toolchains/build/esp32/../../esp32/share/gcc-5.2.0/python'
+libdir = '/home/johny/src/nodemcu-prebuilt-toolchains/build/esp32/../../esp32/xtensa-esp32-elf/lib'
 
 # This file might be loaded when there is no current objfile.  This
 # can happen if the user loads it manually.  In this case we don't
@@ -55,6 +55,4 @@ if gdb.current_objfile () is not None:
     if not dir_ in sys.path:
         sys.path.insert(0, dir_)
 
-# Load the pretty-printers.
-from libstdcxx.v6.printers import register_libstdcxx_printers
-register_libstdcxx_printers (gdb.current_objfile ())
+import libstdcxx.v6
